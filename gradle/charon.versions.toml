@@ -1,0 +1,10 @@
+[versions]
+agp = "8.11.2"
+billing = "9.0.0"
+
+[libraries]
+billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "agp" }
+

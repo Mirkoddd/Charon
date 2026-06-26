@@ -1,0 +1,1 @@
+-keepclassmembers enum * implements com.mirkoddd.charon.CharonSku { *; }

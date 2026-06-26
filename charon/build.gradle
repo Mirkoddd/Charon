@@ -1,0 +1,35 @@
+plugins {
+    alias(charonLibs.plugins.android.library)
+}
+
+android {
+    namespace 'com.mirkoddd.charon'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 31
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
+}
+
+dependencies {
+    implementation charonLibs.billing
+}

@@ -1,0 +1,73 @@
+plugins {
+    alias(appLibs.plugins.android.application)
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+def playConsoleKey = localProperties.getProperty('CHARON_PLAY_CONSOLE_KEY', '""')
+
+android {
+    namespace 'com.mirkoddd.charon.sample'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.mirkoddd.charon.sample"
+        minSdk 31
+        targetSdk 36
+        versionCode 2
+        versionName "1.0"
+    }
+
+    buildFeatures {
+        buildConfig true
+        viewBinding true
+    }
+
+    defaultConfig {
+        buildConfigField "String", "PLAY_CONSOLE_KEY", "\"${playConsoleKey}\""
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(localProperties['KEYSTORE_PATH'])
+            storePassword localProperties['KEYSTORE_PASSWORD']
+            keyAlias localProperties['KEY_ALIAS']
+            keyPassword localProperties['KEY_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        def useObfuscation = false
+
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled useObfuscation
+            shrinkResources useObfuscation
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
+            minifyEnabled useObfuscation
+            shrinkResources useObfuscation
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+
+    implementation appLibs.appcompat
+    implementation appLibs.material
+
+    implementation project(':charon')
+}

@@ -1,0 +1,21 @@
+*.iml
+.gradle/
+local.properties
+.DS_Store
+
+# Cartelle di build e cache
+build/
+*/build/
+captures/
+.externalNativeBuild/
+.cxx/
+/.idea/caches/
+/.idea/libraries/
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# Le tue cartelle specifiche (con lo slash finale!)
+temp_billing/
+app/release/
