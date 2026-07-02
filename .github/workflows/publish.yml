@@ -1,0 +1,42 @@
+name: Publish to Maven Central
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build and Publish to Local Staging
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+        run: ./gradlew :charon:publishReleasePublicationToStagingRepository
+
+      - name: Zip and Upload to Sonatype Central
+        env:
+          SONATYPE_USER: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASS: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          cd charon/build/central-bundle
+          zip -r charon-release.zip *
+          echo "Uploading to Sonatype..."
+          curl -i --fail --request POST \
+            --url "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC" \
+            --user "$SONATYPE_USER:$SONATYPE_PASS" \
+            --header "Accept: application/json" \
+            --form "bundle=@charon-release.zip"

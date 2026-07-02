@@ -1,5 +1,7 @@
 plugins {
     alias(charonLibs.plugins.android.library)
+    id 'maven-publish'
+    id 'signing'
 }
 
 android {
@@ -28,8 +30,73 @@ android {
             options.compilerArgs << "-Xlint:deprecation"
         }
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
     implementation charonLibs.billing
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.release
+
+                groupId = 'com.mirkoddd'
+                artifactId = 'charon'
+                version = '1.0.0'
+
+                pom {
+                    name = 'Charon'
+                    description = 'A Google Play Billing Library 9+ Wrapper for Android'
+                    url = 'https://github.com/mirkoddd/Charon'
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'mirko_ddd'
+                            name = 'Mirko Dimartino'
+                            email = 'mirkoddd@gmail.com'
+                        }
+                    }
+
+                    scm {
+                        connection = 'scm:git:git://github.com/mirkoddd/Charon.git'
+                        developerConnection = 'scm:git:ssh://github.com:mirkoddd/Charon.git'
+                        url = 'https://github.com/mirkoddd/Charon'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "Staging"
+                url = rootProject.layout.buildDirectory.dir("central-bundle")
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = System.getenv("GPG_SIGNING_KEY")
+    def signingPassword = System.getenv("GPG_PASSWORD")
+
+    if (signingKey != null) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+    sign publishing.publications
 }
