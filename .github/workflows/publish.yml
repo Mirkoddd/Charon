@@ -25,7 +25,7 @@ jobs:
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
-        run: ./gradlew :charon:publishReleasePublicationToStagingRepository
+        run: ./gradlew :charon:publishMavenJavaPublicationToStagingRepository
 
       - name: Zip and Upload to Sonatype Central
         env:
