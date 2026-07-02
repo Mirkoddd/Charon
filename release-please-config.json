@@ -5,11 +5,7 @@
       "package-name": "charon",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        {
-          "type": "xml",
-          "path": "charon/build.gradle",
-          "version": "1.0.0"
-        }
+        "charon/build.gradle"
       ]
     }
   }
