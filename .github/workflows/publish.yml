@@ -32,7 +32,7 @@ jobs:
           SONATYPE_USER: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASS: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
-          cd charon/build/central-bundle
+          cd build/central-bundle
           zip -r charon-release.zip *
           echo "Uploading to Sonatype..."
           curl -i --fail --request POST \
