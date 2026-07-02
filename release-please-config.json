@@ -1,0 +1,16 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "charon",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "xml",
+          "path": "charon/build.gradle",
+          "version": "1.0.0"
+        }
+      ]
+    }
+  }
+}
