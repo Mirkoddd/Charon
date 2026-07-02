@@ -32,10 +32,13 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(localProperties['KEYSTORE_PATH'])
-            storePassword localProperties['KEYSTORE_PASSWORD']
-            keyAlias localProperties['KEY_ALIAS']
-            keyPassword localProperties['KEY_PASSWORD']
+            def keystorePath = localProperties.getProperty('KEYSTORE_PATH')
+            if (keystorePath != null) {
+                storeFile file(keystorePath)
+                storePassword localProperties.getProperty('KEYSTORE_PASSWORD')
+                keyAlias localProperties.getProperty('KEY_ALIAS')
+                keyPassword localProperties.getProperty('KEY_PASSWORD')
+            }
         }
     }
 
@@ -43,14 +46,18 @@ android {
         def useObfuscation = false
 
         release {
-            signingConfig signingConfigs.release
+            if (localProperties.getProperty('KEYSTORE_PATH') != null) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled useObfuscation
             shrinkResources useObfuscation
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
-            signingConfig signingConfigs.release
+            if (localProperties.getProperty('KEYSTORE_PATH') != null) {
+                signingConfig signingConfigs.release
+            }
             debuggable true
             minifyEnabled useObfuscation
             shrinkResources useObfuscation
