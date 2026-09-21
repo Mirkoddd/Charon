@@ -88,8 +88,16 @@ public final class CatalogMapper {
         ProductDetails.PricingPhase base = phases.get(phases.size() - 1);
         BillingPeriod billingPeriod = BillingPeriod.fromIsoString(base.getBillingPeriod());
 
+        long baseMicros = base.getPriceAmountMicros();
+        String currencyCode = base.getPriceCurrencyCode();
+
         if (phases.size() == 1) {
-            return new CharonPlan.Standard(current.getFormattedPrice(), billingPeriod);
+            return new CharonPlan.Standard(
+                    current.getFormattedPrice(),
+                    billingPeriod,
+                    baseMicros,
+                    currencyCode
+            );
         }
 
         if (current.getPriceAmountMicros() == 0) {
@@ -97,11 +105,19 @@ public final class CatalogMapper {
                     current.getFormattedPrice(),
                     base.getFormattedPrice(),
                     billingPeriod,
-                    BillingPeriod.fromIsoString(current.getBillingPeriod())
+                    BillingPeriod.fromIsoString(current.getBillingPeriod()),
+                    baseMicros,
+                    currencyCode
             );
         }
 
-        return new CharonPlan.Discounted(current.getFormattedPrice(), base.getFormattedPrice(), billingPeriod);
+        return new CharonPlan.Discounted(
+                current.getFormattedPrice(),
+                base.getFormattedPrice(),
+                billingPeriod,
+                baseMicros,
+                currencyCode
+        );
     }
 
     @NonNull

@@ -23,36 +23,41 @@ public record CharonPlan(
     public PricingProvider pricingInfo() {
         return new PricingProvider() {
             @Override @NonNull public String currentPrice() { return pricing.currentPrice(); }
-            @Override public long amountMicros() { 
-                // We don't have micros in subscription pricing yet, using a sentinel or placeholder
-                return 0; 
-            }
+            @Override public long amountMicros() { return pricing.amountMicros(); }
         };
     }
 
     public sealed interface Pricing permits FreeTrial, Discounted, Standard {
         @NonNull String currentPrice();
         @NonNull BillingPeriod billingPeriod();
+        long amountMicros();
+        @NonNull String currencyCode();
     }
 
     public record FreeTrial(
             @NonNull String price,
             @NonNull String renewalPrice,
             @NonNull BillingPeriod billingPeriod,
-            @NonNull BillingPeriod trialPeriod) implements Pricing {
+            @NonNull BillingPeriod trialPeriod,
+            long amountMicros,
+            @NonNull String currencyCode) implements Pricing {
         @Override @NonNull public String currentPrice() { return price; }
     }
 
     public record Discounted(
             @NonNull String price,
             @NonNull String fullPrice,
-            @NonNull BillingPeriod billingPeriod) implements Pricing {
+            @NonNull BillingPeriod billingPeriod,
+            long amountMicros,
+            @NonNull String currencyCode) implements Pricing {
         @Override @NonNull public String currentPrice() { return price; }
     }
 
     public record Standard(
             @NonNull String price,
-            @NonNull BillingPeriod billingPeriod) implements Pricing {
+            @NonNull BillingPeriod billingPeriod,
+            long amountMicros,
+            @NonNull String currencyCode) implements Pricing {
         @Override @NonNull public String currentPrice() { return price; }
     }
 
