@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/Mirkoddd/Charon/compare/charon-v1.0.1...charon-v1.0.2) (2026-09-21)
+
+
+### Bug Fixes
+
+* added micros to CharonPlan ([ab54792](https://github.com/Mirkoddd/Charon/commit/ab54792dd67a863bf526dff73c24dc33fa3e9d9f))
+
 ## [1.0.1](https://github.com/Mirkoddd/Charon/compare/charon-v1.0.0...charon-v1.0.1) (2026-07-02)
 
 
